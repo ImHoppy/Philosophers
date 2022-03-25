@@ -6,7 +6,7 @@
 #    By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/18 12:15:17 by cdefonte          #+#    #+#              #
-#    Updated: 2022/03/24 14:03:08 by mbraets          ###   ########.fr        #
+#    Updated: 2022/03/24 15:25:28 by mbraets          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,9 +18,10 @@ DHEADER		=	-Iincludes/
 CC			=	cc
 
 CFLAGS		=	-Werror -Wall -Wextra -g3
-LIBFLAGS	=	$(DHEADER)
+LIBFLAGS	=	$(DHEADER) -lpthread
 
-SRCS		=	srcs/philo.c
+SRCS		=	srcs/philo.c \
+srcs/ft_atoi.c
 
 
 OBJS		=	$(SRCS:.c=.o)
@@ -30,25 +31,20 @@ OBJS		=	$(SRCS:.c=.o)
 
 all			:	$(NAME)
 
-$(NAME)		:	$(OBJS) $(LIBFT) $(HEADER)
-				$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBFT) $(LIBFLAGS)
-
-$(LIBFT)	:
-				make gnl -C ./libft
+$(NAME)		:	$(OBJS) $(HEADER)
+				$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBFLAGS)
 
 clean		:
 				rm -rf $(OBJS)
-				make clean -C ./libft
 
 fclean		:	clean
 				rm -f $(NAME)
-				make fclean -C ./libft
 
 debug		:
 				$(eval CFLAGS+=-DDEBUG)
 
 run			:	debug all
-				valgrind --suppressions=.ignore_leaks --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt ./minishell
+				valgrind --suppressions=.ignore_leaks --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt ./$(NAME)
 
 re			:	fclean all
 .PHONY: all clean run fclean
