@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 13:44:31 by mbraets           #+#    #+#             */
-/*   Updated: 2022/03/25 13:06:20 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/03/25 15:25:07 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,29 @@
 # define LOG_THINKING	= "%d %d is thinking\n"
 # define LOG_DIE		= "%d %d died\n"
 
+typedef pthread_mutex_t	t_forks;
+typedef struct timeval	t_time;
+
 typedef struct s_philo {
-	pthread_mutex_t	*left;
-	pthread_mutex_t	*right;
-	int				index;
+	t_forks		*left;
+	t_forks		*right;
+	int			index;
 }	t_philo;
 
 typedef struct s_data {
-	t_philo			*philos;
-	pthread_mutex_t	*forks;
-	struct timeval	start_time;
-	unsigned int	philo_max;
-	unsigned int	time_die;
-	unsigned int	time_eat;
-	unsigned int	time_sleep;
-	unsigned int	eat_max;
+	t_philo		**philos;
+	t_forks		**forks;
+	t_time		start_time;
+	int			philo_max;
+	int			time_die;
+	int			time_eat;
+	int			time_sleep;
+	int			eat_max;
 }	t_data;
 
-int	ft_atoi(const char *str);
+int		ft_atoi(const char *str);
+void	*ft_calloc(size_t count, size_t size);
+void	philo_free_struct(t_data *data);
 
 #endif
 

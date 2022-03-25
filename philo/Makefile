@@ -6,7 +6,7 @@
 #    By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/18 12:15:17 by cdefonte          #+#    #+#              #
-#    Updated: 2022/03/24 15:25:28 by mbraets          ###   ########.fr        #
+#    Updated: 2022/03/25 15:26:16 by mbraets          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,10 @@ CFLAGS		=	-Werror -Wall -Wextra -g3
 LIBFLAGS	=	$(DHEADER) -lpthread
 
 SRCS		=	srcs/philo.c \
-srcs/ft_atoi.c
+srcs/philo_free.c \
+\
+srcs/ft_atoi.c \
+srcs/ft_calloc.c
 
 
 OBJS		=	$(SRCS:.c=.o)
