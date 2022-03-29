@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 12:19:03 by mbraets           #+#    #+#             */
-/*   Updated: 2022/03/25 14:33:02 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/03/25 15:45:33 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,16 @@ static void	*ft_memset(void *b, int c, size_t len)
 		a[i++] = (unsigned char) c;
 	b = (void *) a;
 	return (b);
+}
+
+void	*xmalloc(size_t size)
+{
+	static int	limit = 0;
+
+	if (limit > 10)
+		return (NULL);
+	limit++;
+	return (malloc(size));
 }
 
 void	*ft_calloc(size_t count, size_t size)

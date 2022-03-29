@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 13:44:28 by mbraets           #+#    #+#             */
-/*   Updated: 2022/03/25 15:26:07 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/03/25 15:47:56 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	philo_init(t_data *data)
 		data->philos[i] = (t_philo *)ft_calloc(1, sizeof(t_philo));
 		if (!data->philos[i])
 			return (1);
+		i++;
 	}
 	data->forks = (t_forks **)ft_calloc(data->philo_max, sizeof(t_forks *));
 	i = 0;
@@ -49,6 +50,7 @@ int	philo_init(t_data *data)
 		data->forks[i] = (t_forks *)ft_calloc(1, sizeof(t_forks));
 		if (!data->forks[i])
 			return (1);
+		i++;
 	}
 	return (0);
 }
