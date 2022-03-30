@@ -6,7 +6,7 @@
 #    By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/18 12:15:17 by cdefonte          #+#    #+#              #
-#    Updated: 2022/03/25 15:26:16 by mbraets          ###   ########.fr        #
+#    Updated: 2022/03/30 12:04:40 by mbraets          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ DHEADER		=	-Iincludes/
 CC			=	cc
 
 CFLAGS		=	-Werror -Wall -Wextra -g3
-LIBFLAGS	=	$(DHEADER) -lpthread
+LIBFLAGS	=	$(DHEADER) -lpthread -pthread
 
 SRCS		=	srcs/philo.c \
 srcs/philo_free.c \
