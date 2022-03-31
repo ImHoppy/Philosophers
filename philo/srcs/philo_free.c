@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 15:11:20 by mbraets           #+#    #+#             */
-/*   Updated: 2022/03/30 19:21:09 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/03/31 13:00:07 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ int	philo_free_forks(t_data *data)
 	int	i;
 
 	i = 0;
-	while (i < data->philo_max && data->forks[i] != NULL)
+	while (i < data->philo_max && &data->forks[i] != NULL)
 	{
-		if (pthread_mutex_destroy(data->forks[i]) != 0)
+		if (pthread_mutex_destroy(&data->forks[i]) != 0)
 			return (1);
-		free(data->forks[i]);
+		// free(data->forks[i]);
 		i++;
 	}
 	free(data->forks);

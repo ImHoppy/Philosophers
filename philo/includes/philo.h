@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 13:44:31 by mbraets           #+#    #+#             */
-/*   Updated: 2022/03/31 11:39:18 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/03/31 15:22:19 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,20 @@
 # include <pthread.h>
 # include <unistd.h>
 # include <sys/time.h>
+# include <stdbool.h>
 
-# define LOG_TAKEN_FORK	= "%d %d has taken a fork\n"
-# define LOG_EATING		= "%d %d is eating\n"
-# define LOG_SLEEPING	= "%d %d is sleeping\n"
-# define LOG_THINKING	= "%d %d is thinking\n"
-# define LOG_DIE		= "%d %d died\n"
+# define LOG_TAKEN_FORK	"%ld %d has taken a fork\n"
+# define LOG_EATING		"%ld %d is eating\n"
+# define LOG_SLEEPING	"%ld %d is sleeping\n"
+# define LOG_THINKING	"%ld %d is thinking\n"
+# define LOG_DIE		"%ld %d died\n"
 
 typedef pthread_mutex_t	t_forks;
 typedef struct timeval	t_time;
 
 typedef struct s_philo {
 	struct s_data	*data;
-	pthread_t		thread_id;
+	pthread_t		thread;
 	t_forks			*left;
 	t_forks			*right;
 	int				state;
@@ -41,13 +42,15 @@ typedef struct s_philo {
 
 typedef struct s_data {
 	t_philo		**philos;
-	t_forks		**forks;
+	t_forks		*forks;
 	t_time		start_time;
 	int			philo_max;
 	int			time_die;
 	int			time_eat;
 	int			time_sleep;
 	int			eat_max;
+	int			philos_eat_finish;
+	bool		loop;
 }	t_data;
 
 int		ft_atoi(const char *str);
@@ -55,6 +58,8 @@ int		ft_atoi(const char *str);
 void	philo_free_struct(t_data *data);
 
 int		ft_calloc(void *dst, size_t size);
+
+void	*routine(void *args);
 
 #endif
 
