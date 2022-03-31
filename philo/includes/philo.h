@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 13:44:31 by mbraets           #+#    #+#             */
-/*   Updated: 2022/03/30 19:45:15 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/03/31 11:39:18 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,14 @@ typedef pthread_mutex_t	t_forks;
 typedef struct timeval	t_time;
 
 typedef struct s_philo {
-	struct s_data		*data;
-	pthread_t	thread_id;
-	t_forks		*left;
-	t_forks		*right;
-	int			state;
-	int			index;
-	int			num_of_eat;
+	struct s_data	*data;
+	pthread_t		thread_id;
+	t_forks			*left;
+	t_forks			*right;
+	int				state;
+	int				index;
+	int				num_of_eat;
 }	t_philo;
-
 
 typedef struct s_data {
 	t_philo		**philos;
@@ -51,11 +50,11 @@ typedef struct s_data {
 	int			eat_max;
 }	t_data;
 
-
-
 int		ft_atoi(const char *str);
-void	*ft_calloc(size_t count, size_t size);
+// void	*ft_calloc(size_t count, size_t size);
 void	philo_free_struct(t_data *data);
+
+int		ft_calloc(void *dst, size_t size);
 
 #endif
 

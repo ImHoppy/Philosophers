@@ -6,24 +6,11 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 12:19:03 by mbraets           #+#    #+#             */
-/*   Updated: 2022/03/25 15:45:33 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/03/31 11:35:33 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-static void	*ft_memset(void *b, int c, size_t len)
-{
-	unsigned int	i;
-	unsigned char	*a;
-
-	i = -1;
-	a = (unsigned char *) b;
-	while (i < len)
-		a[i++] = (unsigned char) c;
-	b = (void *) a;
-	return (b);
-}
 
 void	*xmalloc(size_t size)
 {
@@ -35,13 +22,22 @@ void	*xmalloc(size_t size)
 	return (malloc(size));
 }
 
-void	*ft_calloc(size_t count, size_t size)
+int	ft_calloc(void *dst, size_t size)
 {
-	void	*ptr;
-
-	ptr = malloc(size * count);
-	if (!ptr)
-		return (NULL);
-	ft_memset(ptr, 0, count * size);
-	return (ptr);
+	*(void **)dst = malloc(size);
+	if (*(void **)dst == NULL)
+		return (1);
+	memset(*(void **)dst, 0, size);
+	return (0);
 }
+
+// void	*ft_calloc(size_t count, size_t size)
+// {
+// 	void	*ptr;
+
+// 	ptr = malloc(size * count);
+// 	if (!ptr)
+// 		return (NULL);
+// 	memset(ptr, 0, count * size);
+// 	return (ptr);
+// }

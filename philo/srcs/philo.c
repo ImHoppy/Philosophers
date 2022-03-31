@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 13:44:28 by mbraets           #+#    #+#             */
-/*   Updated: 2022/03/30 19:50:20 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/03/31 11:40:37 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,29 +49,25 @@ int	philo_init(t_data *data)
 {
 	int	i;
 
-	data->philos = (t_philo **)ft_calloc(data->philo_max, sizeof(t_philo *));
-	if (!data->philos)
+	if (ft_calloc(&data->philos, data->philo_max * sizeof(t_philo *)))
 		return (1);
 	i = 0;
 	while (i < data->philo_max)
 	{
-		data->philos[i] = (t_philo *)ft_calloc(1, sizeof(t_philo));
+		if (ft_calloc(&data->philos[i], 1 * sizeof(t_philo)))
+			return (1);
 		data->philos[i]->index = i + 1;
 		*data->philos[i] = (t_philo){.index = i + 1, .data = data};
-		if (!data->philos[i])
-			return (1);
 		if (pthread_create(&data->philos[i]->thread_id, NULL, &routine, (void *)data) != 0)
 			return (1);
 		i++;
 	}
-	data->forks = (t_forks **)ft_calloc(data->philo_max, sizeof(t_forks *));
-	if (!data->forks)
+	if (ft_calloc(&data->forks, data->philo_max * sizeof(t_forks *)))
 		return (1);
 	i = 0;
 	while (i < data->philo_max)
 	{
-		data->forks[i] = (t_forks *)ft_calloc(1, sizeof(t_forks));
-		if (!data->forks[i])
+		if (ft_calloc(&data->forks[i], sizeof(t_forks) * 1))
 			return (1);
 		if (pthread_mutex_init(data->forks[i], NULL) != 0)
 			return (1);
