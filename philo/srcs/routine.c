@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 14:10:49 by mbraets           #+#    #+#             */
-/*   Updated: 2022/03/31 15:29:33 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/04/01 11:03:41 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,14 @@ void	philo_log(t_philo *philo, char *log)
 void	philo_eating(t_philo *philo)
 {
 	pthread_mutex_lock(philo->left);
+	philo_log(philo, LOG_TAKEN_FORK);
 	pthread_mutex_lock(philo->right);
+	philo_log(philo, LOG_TAKEN_FORK);
 	philo_log(philo, LOG_EATING);
 	philo->num_of_eat++;
 	if (philo->num_of_eat == philo->data->eat_max)
 		philo->data->philos_eat_finish += 1;
-	usleep(philo->data->time_eat);
+	usleep(philo->data->time_eat * 1000);
 	pthread_mutex_unlock(philo->left);
 	pthread_mutex_unlock(philo->right);
 }
