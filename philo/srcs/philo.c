@@ -6,11 +6,17 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 13:44:28 by mbraets           #+#    #+#             */
-/*   Updated: 2022/03/31 15:25:51 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/04/01 16:30:23 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+/**
+ * TODO
+ *  separer  les usleep pour check si il meurt pas dans son sommeil
+ *  mutex les display
+ */
 
 int	philo_parse(t_data *data, int ac, char **av)
 {
