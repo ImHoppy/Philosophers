@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 14:10:49 by mbraets           #+#    #+#             */
-/*   Updated: 2022/04/01 15:09:41 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/04/04 16:11:45 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,14 @@ long long	getms(struct timeval now)
 	return (ms);
 }
 
+long long	getnowms(void)
+{
+	t_time	now;
+
+	gettimeofday(&now, NULL);
+	return (getms(now));
+}
+
 void	philo_log(t_philo *philo, char *log)
 {
 	long long	now_ms;
@@ -31,24 +39,38 @@ void	philo_log(t_philo *philo, char *log)
 	printf(log, now_ms, philo->index + 1);
 }
 
+void	philo_sleep(t_philo *philo, int ms)
+{
+	while (ms)
+	{
+		if (getms(philo->starving_time) + philo->data->time_die > getnowms())
+		{
+			philo_log(philo, LOG_DIE);
+			philo->data->loop = false;
+			return ;
+		}
+		usleep(1000);
+		--ms;
+	}
+}
+
 void	philo_eating(t_philo *philo)
 {
-	t_time	starving;
 	t_time	now;
 
-	gettimeofday(&starving, NULL);
 	pthread_mutex_lock(philo->left);
 	philo_log(philo, LOG_TAKEN_FORK);
 	pthread_mutex_lock(philo->right);
 	gettimeofday(&now, NULL);
-	if (getms(starving) - getms(now) < philo->data->time_die)
+	if (getms(philo->starving_time) - getms(now) < philo->data->time_die && philo->data->loop)
 	{
 		philo_log(philo, LOG_TAKEN_FORK);
 		philo_log(philo, LOG_EATING);
 		philo->num_of_eat++;
 		if (philo->num_of_eat == philo->data->eat_max)
 			philo->data->philos_eat_finish += 1;
-		usleep(philo->data->time_eat * 1000);
+		philo_sleep(philo, philo->data->time_eat);
+		gettimeofday(&philo->starving_time, NULL);
 	}
 	else
 	{
@@ -62,7 +84,7 @@ void	philo_eating(t_philo *philo)
 void	philo_sleeping(t_philo *philo)
 {
 	philo_log(philo, LOG_SLEEPING);
-	usleep(philo->data->time_sleep * 1000);
+	philo_sleep(philo, philo->data->time_sleep);
 }
 
 void	philo_thinking(t_philo *philo)

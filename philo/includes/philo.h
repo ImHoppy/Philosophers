@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 13:44:31 by mbraets           #+#    #+#             */
-/*   Updated: 2022/03/31 15:22:19 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/04/04 12:46:12 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_philo {
 	pthread_t		thread;
 	t_forks			*left;
 	t_forks			*right;
+	t_time			starving_time;
 	int				state;
 	int				index;
 	int				num_of_eat;

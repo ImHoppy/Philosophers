@@ -6,18 +6,25 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 13:44:28 by mbraets           #+#    #+#             */
-/*   Updated: 2022/04/01 16:30:23 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/04/04 16:08:31 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 /**
- * TODO
+ * TODO:
  *  separer  les usleep pour check si il meurt pas dans son sommeil
  *  mutex les display
  */
 
+/**
+ * TEST:
+ *  5 800 200 -> never die
+ *  5 800 200 200 7
+ *  4 410 200 200 -> never die
+ *  4 310 200 100 -> one die
+ */
 int	philo_parse(t_data *data, int ac, char **av)
 {
 	if ((ac != 5) & (ac != 6))
