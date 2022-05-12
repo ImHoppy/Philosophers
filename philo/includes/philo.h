@@ -58,7 +58,8 @@ int		ft_atoi(const char *str);
 // void	*ft_calloc(size_t count, size_t size);
 void	philo_free_struct(t_data *data);
 
-int		ft_calloc(void *dst, size_t size);
+int	ft_palloc(void *dst, size_t size);
+void	*ft_calloc(size_t count, size_t size);
 
 void	*routine(void *args);
 
