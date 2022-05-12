@@ -55,13 +55,13 @@ int	philo_init(t_data *data)
 {
 	int	i;
 
-	if (ft_calloc(&data->philos, data->philo_max * sizeof(t_philo *))
-		|| ft_calloc(&data->forks, data->philo_max * sizeof(t_forks)))
+	if (ft_palloc(&data->philos, data->philo_max * sizeof(t_philo *))
+		|| ft_palloc(&data->forks, data->philo_max * sizeof(t_forks)))
 		return (1);
 	i = 0;
 	while (i < data->philo_max)
 	{
-		if (ft_calloc(&data->philos[i], sizeof(t_philo) * 1))
+		if (ft_palloc(&data->philos[i], sizeof(t_philo) * 1))
 			return (1);
 		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
 			return (1);

@@ -28,6 +28,7 @@
 # define LOG_DIE		"%ld %d died\n"
 
 typedef pthread_mutex_t	t_forks;
+typedef pthread_mutex_t	t_mutex;
 typedef struct timeval	t_time;
 
 typedef struct s_philo {
@@ -44,6 +45,7 @@ typedef struct s_philo {
 typedef struct s_data {
 	t_philo		**philos;
 	t_forks		*forks;
+	t_mutex		print_mutex;
 	t_time		start_time;
 	int			philo_max;
 	int			time_die;
@@ -55,10 +57,9 @@ typedef struct s_data {
 }	t_data;
 
 int		ft_atoi(const char *str);
-// void	*ft_calloc(size_t count, size_t size);
 void	philo_free_struct(t_data *data);
 
-int	ft_palloc(void *dst, size_t size);
+int		ft_palloc(void *dst, size_t size);
 void	*ft_calloc(size_t count, size_t size);
 
 void	*routine(void *args);

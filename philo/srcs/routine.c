@@ -34,9 +34,11 @@ void	philo_log(t_philo *philo, char *log)
 	long long	now_ms;
 	t_time		now_time;
 
+	pthread_mutex_lock(&philo->data->print_mutex);
 	gettimeofday(&now_time, NULL);
 	now_ms = getms(now_time) - getms(philo->data->start_time);
 	printf(log, now_ms, philo->index + 1);
+	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
 void	philo_sleep(t_philo *philo, int ms)
@@ -98,7 +100,7 @@ void	*routine(void *args)
 
 	philo = (t_philo *)args;
 	if (philo->index % 2 != 0)
-		usleep(philo->data->time_eat * 1000);
+		usleep(philo->data->time_eat );
 	while (philo->data->loop && philo->state == 0)
 	{
 		philo_eating(philo);
