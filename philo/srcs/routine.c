@@ -45,7 +45,7 @@ void	philo_sleep(t_philo *philo, int ms)
 {
 	while (ms)
 	{
-		if (getms(philo->starving_time) + philo->data->time_die > getnowms())
+		if (getnowms() - getms(philo->starving_time) > philo->data->time_die)
 		{
 			philo_log(philo, LOG_DIE);
 			philo->data->loop = false;
@@ -64,6 +64,8 @@ void	philo_eating(t_philo *philo)
 	philo_log(philo, LOG_TAKEN_FORK);
 	pthread_mutex_lock(philo->right);
 	gettimeofday(&now, NULL);
+	if (getms(philo->starving_time) == 0)
+		gettimeofday(&philo->starving_time, NULL);
 	if (getms(philo->starving_time) - getms(now) < philo->data->time_die && philo->data->loop)
 	{
 		philo_log(philo, LOG_TAKEN_FORK);
@@ -76,6 +78,7 @@ void	philo_eating(t_philo *philo)
 	}
 	else
 	{
+		if (philo->data->loop)
 		philo_log(philo, LOG_DIE);
 		philo->state = 1;
 	}

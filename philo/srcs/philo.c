@@ -32,7 +32,7 @@ int	philo_parse(t_data *data, int ac, char **av)
 	*data = (t_data){.philo_max = ft_atoi(av[1]), .time_die = ft_atoi(av[2]),
 		.time_eat = ft_atoi(av[3]), .time_sleep = ft_atoi(av[4]),
 		.eat_max = ft_atoi(av[5]),
-		.loop = true};
+		.loop = true}; // Remove memcpy
 	if (data->philo_max < 1
 		|| data->time_die < 1
 		|| data->time_eat < 1
@@ -42,14 +42,6 @@ int	philo_parse(t_data *data, int ac, char **av)
 	gettimeofday(&data->start_time, NULL);
 	return (0);
 }
-
-// void	eat()
-// {
-// 	mute
-
-// }
-
-
 
 int	philo_init(t_data *data)
 {
@@ -66,7 +58,7 @@ int	philo_init(t_data *data)
 		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
 			return (1);
 		*data->philos[i] = (t_philo){.index = i, .data = data,
-			.right = &data->forks[i]};
+			.right = &data->forks[i]}; // Remove memcpy
 		if (pthread_create(&data->philos[i]->thread, NULL, &routine, data->philos[i]) != 0)
 			return (1);
 		if (i == 0)
