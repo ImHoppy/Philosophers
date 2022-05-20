@@ -23,8 +23,8 @@ LIBFLAGS	=	$(DHEADER) -lpthread -pthread
 SRCS		=	srcs/philo.c \
 srcs/philo_free.c \
 srcs/routine.c \
-srcs/ft_atoi.c \
-srcs/ft_calloc.c
+../shared/ft_atoi.c \
+../shared/ft_calloc.c
 
 
 OBJS		=	$(SRCS:.c=.o)
