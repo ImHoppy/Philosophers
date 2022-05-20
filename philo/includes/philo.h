@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 13:44:31 by mbraets           #+#    #+#             */
-/*   Updated: 2022/04/04 12:46:12 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/05/20 19:09:46 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_philo {
 	pthread_t		thread;
 	t_forks			*left;
 	t_forks			*right;
-	t_time			starving_time;
+	unsigned long	starving_time;
 	int				state;
 	int				index;
 	int				num_of_eat;
@@ -53,6 +53,7 @@ typedef struct s_data {
 	int			time_sleep;
 	int			eat_max;
 	int			philos_eat_finish;
+	t_mutex		loop_mutex;
 	bool		loop;
 }	t_data;
 
@@ -61,6 +62,7 @@ void	philo_free_struct(t_data *data);
 
 int		ft_palloc(void *dst, size_t size);
 void	*ft_calloc(size_t count, size_t size);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
 
 void	*routine(void *args);
 

@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 13:44:28 by mbraets           #+#    #+#             */
-/*   Updated: 2022/04/04 16:08:31 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/05/20 17:32:31 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ int	philo_parse(t_data *data, int ac, char **av)
 {
 	if ((ac != 5) & (ac != 6))
 		return (1);
-	*data = (t_data){.philo_max = ft_atoi(av[1]), .time_die = ft_atoi(av[2]),
-		.time_eat = ft_atoi(av[3]), .time_sleep = ft_atoi(av[4]),
-		.eat_max = ft_atoi(av[5]),
-		.loop = true}; // Remove memcpy
+	ft_memcpy(data, &(t_data){.philo_max = ft_atoi(av[1]),
+		.time_die = ft_atoi(av[2]), .time_eat = ft_atoi(av[3]),
+		.time_sleep = ft_atoi(av[4]), .eat_max = ft_atoi(av[5]), .loop = true},
+		sizeof(t_data));
 	if (data->philo_max < 1
 		|| data->time_die < 1
 		|| data->time_eat < 1
@@ -57,8 +57,8 @@ int	philo_init(t_data *data)
 			return (1);
 		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
 			return (1);
-		*data->philos[i] = (t_philo){.index = i, .data = data,
-			.right = &data->forks[i]}; // Remove memcpy
+		ft_memcpy(data->philos[i], &(t_philo){.index = i, .data = data,
+			.right = &data->forks[i]}, sizeof(t_philo)); // Remove memcpy
 		if (pthread_create(&data->philos[i]->thread, NULL, &routine, data->philos[i]) != 0)
 			return (1);
 		if (i == 0)

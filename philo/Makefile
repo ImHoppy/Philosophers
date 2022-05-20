@@ -6,7 +6,7 @@
 #    By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/18 12:15:17 by cdefonte          #+#    #+#              #
-#    Updated: 2022/03/31 14:25:52 by mbraets          ###   ########.fr        #
+#    Updated: 2022/05/20 20:35:28 by mbraets          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ SRCS		=	srcs/philo.c \
 srcs/philo_free.c \
 srcs/routine.c \
 ../shared/ft_atoi.c \
-../shared/ft_calloc.c
+../shared/ft_calloc.c \
+../shared/ft_memcpy.c
 
 
 OBJS		=	$(SRCS:.c=.o)
@@ -47,7 +48,7 @@ debug		:
 				$(eval CFLAGS+=-DDEBUG)
 
 run			:	debug all
-				valgrind --suppressions=.ignore_leaks --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt ./$(NAME)
+				valgrind --tool=helgrind --tool=drd --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt ./$(NAME)
 
 re			:	fclean all
 .PHONY: all clean run fclean

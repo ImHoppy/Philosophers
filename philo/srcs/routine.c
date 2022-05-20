@@ -6,22 +6,22 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 14:10:49 by mbraets           #+#    #+#             */
-/*   Updated: 2022/04/04 16:11:45 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/05/20 19:49:38 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-long long	getms(struct timeval now)
+unsigned long	getms(struct timeval now)
 {
-	long long		ms;
+	unsigned long		ms;
 
 	ms = now.tv_sec * 1000;
 	ms += now.tv_usec / 1000;
 	return (ms);
 }
 
-long long	getnowms(void)
+unsigned long	getnowms(void)
 {
 	t_time	now;
 
@@ -31,12 +31,10 @@ long long	getnowms(void)
 
 void	philo_log(t_philo *philo, char *log)
 {
-	long long	now_ms;
-	t_time		now_time;
+	unsigned long	now_ms;
 
 	pthread_mutex_lock(&philo->data->print_mutex);
-	gettimeofday(&now_time, NULL);
-	now_ms = getms(now_time) - getms(philo->data->start_time);
+	now_ms = getnowms() - getms(philo->data->start_time);
 	printf(log, now_ms, philo->index + 1);
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
@@ -45,10 +43,13 @@ void	philo_sleep(t_philo *philo, int ms)
 {
 	while (ms)
 	{
-		if (getnowms() - getms(philo->starving_time) > philo->data->time_die)
+		if (getnowms() - philo->starving_time > (unsigned long) philo->data->time_die)
 		{
-			philo_log(philo, LOG_DIE);
+			pthread_mutex_lock(&philo->data->loop_mutex);
+			if (philo->data->loop)
+				philo_log(philo, LOG_DIE);
 			philo->data->loop = false;
+			pthread_mutex_unlock(&philo->data->loop_mutex);
 			return ;
 		}
 		usleep(1000);
@@ -58,15 +59,15 @@ void	philo_sleep(t_philo *philo, int ms)
 
 void	philo_eating(t_philo *philo)
 {
-	t_time	now;
+	unsigned long	now;
 
 	pthread_mutex_lock(philo->left);
 	philo_log(philo, LOG_TAKEN_FORK);
 	pthread_mutex_lock(philo->right);
-	gettimeofday(&now, NULL);
-	if (getms(philo->starving_time) == 0)
-		gettimeofday(&philo->starving_time, NULL);
-	if (getms(philo->starving_time) - getms(now) < philo->data->time_die && philo->data->loop)
+	now = getnowms();
+	if (philo->starving_time == 0)
+		philo->starving_time = getnowms();
+	if (philo->starving_time - now < (unsigned long) philo->data->time_die && philo->data->loop)
 	{
 		philo_log(philo, LOG_TAKEN_FORK);
 		philo_log(philo, LOG_EATING);
@@ -74,7 +75,7 @@ void	philo_eating(t_philo *philo)
 		if (philo->num_of_eat == philo->data->eat_max)
 			philo->data->philos_eat_finish += 1;
 		philo_sleep(philo, philo->data->time_eat);
-		gettimeofday(&philo->starving_time, NULL);
+		philo->starving_time = getnowms();
 	}
 	else
 	{
@@ -101,18 +102,21 @@ void	*routine(void *args)
 {
 	t_philo	*philo;
 
+	unsigned long old = getnowms();
 	philo = (t_philo *)args;
+	philo->starving_time = getnowms();
 	if (philo->index % 2 != 0)
-		usleep(philo->data->time_eat );
-	while (philo->data->loop && philo->state == 0)
-	{
-		philo_eating(philo);
-		if (philo->state)
-			return (NULL);
-		philo_sleeping(philo);
-		philo_thinking(philo);
-		if (philo->num_of_eat == philo->data->eat_max)
-			philo->data->loop = false;
-	}
+		philo_sleep(philo, philo->data->time_eat);
+	printf("%lu : %d %d mange\n", getnowms() - old, philo->index, philo->index % 2);
+	// while (philo->data->loop && philo->state == 0)
+	// {
+	// 	philo_eating(philo);
+	// 	if (philo->state)
+	// 		return (NULL);
+	// 	philo_sleeping(philo);
+	// 	philo_thinking(philo);
+	// 	if (philo->num_of_eat == philo->data->eat_max)
+	// 		philo->data->loop = false;
+	// }
 	return (NULL);
 }
