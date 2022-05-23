@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 14:10:49 by mbraets           #+#    #+#             */
-/*   Updated: 2022/05/23 16:44:18 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/05/23 17:21:03 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@ void	philo_eating(t_philo *philo)
 	{
 		philo_log(philo, LOG_EATING);
 		philo->num_of_eat++;
-		if (philo->num_of_eat == philo->data->eat_max)
+		if (philo->num_of_eat == philo->data->eat_max && philo->state == ALIVE)
+		{
 			philo->state = FINISH;
+			philo_addfinish(philo->data);
+		}
 		philo_sleep(philo, philo->data->time_eat);
 		philo->starving_time = getnowms();
 	}
@@ -38,14 +41,14 @@ void	philo_eating(t_philo *philo)
 
 void	philo_sleeping(t_philo *philo)
 {
-	if (philo_getloop(philo->data))
+	if (philo_getloop(philo->data) || philo->state == FINISH)
 		philo_log(philo, LOG_SLEEPING);
 	philo_sleep(philo, philo->data->time_sleep);
 }
 
 void	philo_thinking(t_philo *philo)
 {
-	if (philo_getloop(philo->data))
+	if (philo_getloop(philo->data) || philo->state == FINISH)
 		philo_log(philo, LOG_THINKING);
 }
 
@@ -70,19 +73,20 @@ void	*routine(void *args)
 	philo->starving_time = getnowms();
 	if (philo->index % 2 != 0)
 		philo_sleep(philo, philo->data->time_eat);
-	while (philo->state == ALIVE && philo_getloop(philo->data) != false)
+	while (philo->state != DEAD && philo_getloop(philo->data))
 	{
 		if (philo_getloop(philo->data) == false)
 			return (NULL);
 		philo_eating(philo);
 		if (check_end(philo))
 			break ;
+		if (philo_getfinish(philo->data) == philo->data->philo_max)
+			break ;
 		philo_sleeping(philo);
 		philo_thinking(philo);
 		if (check_end(philo))
 			break ;
 	}
-	if (philo->state != FINISH)
-		philo_setloop(philo->data, false);
+	philo_setloop(philo->data, false);
 	return (NULL);
 }
