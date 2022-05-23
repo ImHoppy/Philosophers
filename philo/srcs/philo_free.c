@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 15:11:20 by mbraets           #+#    #+#             */
-/*   Updated: 2022/03/31 13:00:07 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/05/23 12:48:48 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	philo_free_philo(t_data *data)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (i < data->philo_max && data->philos[i] != NULL)
@@ -27,7 +27,7 @@ void	philo_free_philo(t_data *data)
 
 int	philo_free_forks(t_data *data)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (i < data->philo_max && &data->forks[i] != NULL)

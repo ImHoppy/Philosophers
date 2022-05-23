@@ -6,22 +6,22 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 14:10:49 by mbraets           #+#    #+#             */
-/*   Updated: 2022/05/20 19:49:38 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/05/23 13:08:56 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-unsigned long	getms(struct timeval now)
+size_t	getms(struct timeval now)
 {
-	unsigned long		ms;
+	size_t		ms;
 
 	ms = now.tv_sec * 1000;
 	ms += now.tv_usec / 1000;
 	return (ms);
 }
 
-unsigned long	getnowms(void)
+size_t	getnowms(void)
 {
 	t_time	now;
 
@@ -31,7 +31,7 @@ unsigned long	getnowms(void)
 
 void	philo_log(t_philo *philo, char *log)
 {
-	unsigned long	now_ms;
+	size_t	now_ms;
 
 	pthread_mutex_lock(&philo->data->print_mutex);
 	now_ms = getnowms() - getms(philo->data->start_time);
@@ -41,9 +41,12 @@ void	philo_log(t_philo *philo, char *log)
 
 void	philo_sleep(t_philo *philo, int ms)
 {
-	while (ms)
+	size_t	sleep;
+
+	sleep = getnowms() + ms;
+	while (getnowms() < sleep)
 	{
-		if (getnowms() - philo->starving_time > (unsigned long) philo->data->time_die)
+		if (getnowms() - philo->starving_time > philo->data->time_die)
 		{
 			pthread_mutex_lock(&philo->data->loop_mutex);
 			if (philo->data->loop)
@@ -52,14 +55,27 @@ void	philo_sleep(t_philo *philo, int ms)
 			pthread_mutex_unlock(&philo->data->loop_mutex);
 			return ;
 		}
-		usleep(1000);
-		--ms;
+		usleep(100);
 	}
+	// while (ms)
+	// {
+	// 	if (getnowms() - philo->starving_time > (size_t) philo->data->time_die)
+	// 	{
+	// 		pthread_mutex_lock(&philo->data->loop_mutex);
+	// 		if (philo->data->loop)
+	// 			philo_log(philo, LOG_DIE);
+	// 		philo->data->loop = false;
+	// 		pthread_mutex_unlock(&philo->data->loop_mutex);
+	// 		return ;
+	// 	}
+	// 	usleep(1000);
+	// 	--ms;
+	// }
 }
 
 void	philo_eating(t_philo *philo)
 {
-	unsigned long	now;
+	size_t	now;
 
 	pthread_mutex_lock(philo->left);
 	philo_log(philo, LOG_TAKEN_FORK);
@@ -67,7 +83,7 @@ void	philo_eating(t_philo *philo)
 	now = getnowms();
 	if (philo->starving_time == 0)
 		philo->starving_time = getnowms();
-	if (philo->starving_time - now < (unsigned long) philo->data->time_die && philo->data->loop)
+	if (philo->starving_time - now < (size_t) philo->data->time_die && philo->data->loop)
 	{
 		philo_log(philo, LOG_TAKEN_FORK);
 		philo_log(philo, LOG_EATING);
@@ -98,25 +114,53 @@ void	philo_thinking(t_philo *philo)
 	philo_log(philo, LOG_THINKING);
 }
 
+bool	philo_getLoop(t_data *data)
+{
+	bool	ret;
+
+	ret = true;
+	pthread_mutex_lock(&data->loop_mutex);
+	ret = data->loop;
+	pthread_mutex_unlock(&data->loop_mutex);
+	return (ret);
+}
+
+void	philo_setLoop(t_data *data, bool loop)
+{
+	pthread_mutex_lock(&data->loop_mutex);
+	data->loop = loop;
+	pthread_mutex_unlock(&data->loop_mutex);
+}
+
 void	*routine(void *args)
 {
 	t_philo	*philo;
 
-	unsigned long old = getnowms();
+	// size_t old = getnowms();
 	philo = (t_philo *)args;
 	philo->starving_time = getnowms();
 	if (philo->index % 2 != 0)
 		philo_sleep(philo, philo->data->time_eat);
-	printf("%lu : %d %d mange\n", getnowms() - old, philo->index, philo->index % 2);
-	// while (philo->data->loop && philo->state == 0)
-	// {
-	// 	philo_eating(philo);
-	// 	if (philo->state)
-	// 		return (NULL);
-	// 	philo_sleeping(philo);
-	// 	philo_thinking(philo);
-	// 	if (philo->num_of_eat == philo->data->eat_max)
-	// 		philo->data->loop = false;
-	// }
+	// printf("%lu : %d %d mange\n", getnowms() - old, philo->index, philo->index % 2);
+
+	while (philo->state == ALIVE)
+	{
+		if (philo_getLoop(philo->data))
+			return (NULL);
+		// philo_eating(philo);
+		// if (!philo->state)
+		// 	return (NULL);
+		philo_sleeping(philo);
+		philo_thinking(philo);
+		// if (philo->num_of_eat == philo->data->eat_max)
+
+		if (philo->state == DEAD)
+		{
+			philo_log(philo, LOG_DIE);
+			philo_setLoop(philo->data, false);
+		}
+		
+		pthread_mutex_lock(&philo->data->loop_mutex);
+	}
 	return (NULL);
 }

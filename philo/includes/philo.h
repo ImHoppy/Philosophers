@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 13:44:31 by mbraets           #+#    #+#             */
-/*   Updated: 2022/05/20 19:09:46 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/05/23 13:08:33 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,20 @@
 typedef pthread_mutex_t	t_forks;
 typedef pthread_mutex_t	t_mutex;
 typedef struct timeval	t_time;
+enum e_state {
+	DEAD,
+	ALIVE
+};
 
 typedef struct s_philo {
 	struct s_data	*data;
 	pthread_t		thread;
 	t_forks			*left;
 	t_forks			*right;
-	unsigned long	starving_time;
-	int				state;
+	enum e_state	state;
+	size_t			starving_time;
 	int				index;
-	int				num_of_eat;
+	size_t			num_of_eat;
 }	t_philo;
 
 typedef struct s_data {
@@ -47,12 +51,12 @@ typedef struct s_data {
 	t_forks		*forks;
 	t_mutex		print_mutex;
 	t_time		start_time;
-	int			philo_max;
-	int			time_die;
-	int			time_eat;
-	int			time_sleep;
-	int			eat_max;
-	int			philos_eat_finish;
+	size_t		philo_max;
+	size_t		time_die;
+	size_t		time_eat;
+	size_t		time_sleep;
+	size_t		eat_max;
+	size_t		philos_eat_finish;
 	t_mutex		loop_mutex;
 	bool		loop;
 }	t_data;

@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 15:23:32 by mbraets           #+#    #+#             */
-/*   Updated: 2022/05/20 19:07:53 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/05/23 12:48:12 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	ft_isspace(int c)
 int	ft_atoi(const char *str)
 {
 	int		negative;
-	unsigned long	result;
+	size_t	result;
 	int		i;
 
 	if (str == NULL)
