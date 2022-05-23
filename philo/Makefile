@@ -6,7 +6,7 @@
 #    By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/18 12:15:17 by cdefonte          #+#    #+#              #
-#    Updated: 2022/05/20 20:35:28 by mbraets          ###   ########.fr        #
+#    Updated: 2022/05/23 16:41:59 by mbraets          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,9 @@ LIBFLAGS	=	$(DHEADER) -lpthread -pthread
 
 SRCS		=	srcs/philo.c \
 srcs/philo_free.c \
-srcs/routine.c \
+srcs/threads/routine.c \
+srcs/threads/utils.c \
+srcs/threads/setter_getter.c \
 ../shared/ft_atoi.c \
 ../shared/ft_calloc.c \
 ../shared/ft_memcpy.c

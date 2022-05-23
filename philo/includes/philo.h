@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 13:44:31 by mbraets           #+#    #+#             */
-/*   Updated: 2022/05/23 13:08:33 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/05/23 16:41:43 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ typedef pthread_mutex_t	t_mutex;
 typedef struct timeval	t_time;
 enum e_state {
 	DEAD,
-	ALIVE
+	ALIVE,
+	FINISH
 };
 
 typedef struct s_philo {
@@ -50,13 +51,15 @@ typedef struct s_data {
 	t_philo		**philos;
 	t_forks		*forks;
 	t_mutex		print_mutex;
+	t_mutex		start_mutex;
 	t_time		start_time;
 	size_t		philo_max;
 	size_t		time_die;
 	size_t		time_eat;
 	size_t		time_sleep;
 	size_t		eat_max;
-	size_t		philos_eat_finish;
+	t_mutex		philo_finish_mutex;
+	size_t		philo_finish;
 	t_mutex		loop_mutex;
 	bool		loop;
 }	t_data;
@@ -69,6 +72,17 @@ void	*ft_calloc(size_t count, size_t size);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 
 void	*routine(void *args);
+
+// Threads
+size_t	getms(struct timeval now);
+size_t	getnowms(void);
+void	philo_sleep(t_philo *philo, int ms);
+void	philo_log(t_philo *philo, char *log);
+
+bool	philo_getloop(t_data *data);
+void	philo_setloop(t_data *data, bool loop);
+size_t	philo_getfinish(t_data *data);
+void	philo_addfinish(t_data *data);
 
 #endif
 
