@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 13:44:31 by mbraets           #+#    #+#             */
-/*   Updated: 2022/05/23 16:41:43 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/06/01 15:00:36 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ bool	philo_getloop(t_data *data);
 void	philo_setloop(t_data *data, bool loop);
 size_t	philo_getfinish(t_data *data);
 void	philo_addfinish(t_data *data);
+int		philo_wait_thread(t_data *data);
 
 #endif
 

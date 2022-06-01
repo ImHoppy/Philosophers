@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 14:10:49 by mbraets           #+#    #+#             */
-/*   Updated: 2022/05/23 17:21:03 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/06/01 15:20:09 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ void	*routine(void *args)
 	philo = (t_philo *)args;
 	pthread_mutex_lock(&philo->data->start_mutex);
 	pthread_mutex_unlock(&philo->data->start_mutex);
+	if (!philo_getloop(philo->data))
+		return (NULL);
 	philo->starving_time = getnowms();
 	if (philo->index % 2 != 0)
 		philo_sleep(philo, philo->data->time_eat);
@@ -87,6 +89,5 @@ void	*routine(void *args)
 		if (check_end(philo))
 			break ;
 	}
-	philo_setloop(philo->data, false);
-	return (NULL);
+	return (philo_setloop(philo->data, false), NULL);
 }

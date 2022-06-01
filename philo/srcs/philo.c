@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 13:44:28 by mbraets           #+#    #+#             */
-/*   Updated: 2022/05/23 16:25:29 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/06/01 15:29:12 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,13 @@ int	philo_init(t_data *data)
 			return (1);
 		ft_memcpy(data->philos[i], &(t_philo){.index = i, .data = data,
 			.right = &data->forks[i], .state = ALIVE}, sizeof(t_philo));
-		if (pthread_create(&data->philos[i]->thread, NULL,
-				&routine, data->philos[i]))
-			return (1);
+		if (pthread_create(&data->philos[i]->thread, NULL, &routine,
+				data->philos[i]))
+		{
+			write(2, "error init thread\n", 18);
+			data->loop = false;
+			return (philo_wait_thread(data), 2);
+		}
 		if (i == 0)
 			data->philos[i]->left = &data->forks[data->philo_max - 1];
 		else
@@ -100,10 +104,9 @@ int	philo_wait_thread(t_data *data)
 	pthread_mutex_unlock(&data->start_mutex);
 	gettimeofday(&data->start_time, NULL);
 	i = 0;
-	while (i < data->philo_max)
+	while (data->philos[i] && i < data->philo_max)
 	{
-		if (pthread_join(data->philos[i]->thread, NULL) != 0)
-			return (1);
+		pthread_join(data->philos[i]->thread, NULL);
 		i++;
 	}
 	return (0);
@@ -117,7 +120,7 @@ int	main(int ac, char **av)
 	if (philo_parse(&data, ac, av) == 1)
 		return (write(2, "Error\n", 6), 1);
 	if (data.philo_max == 1)
-		return (printf(LOG_DIE, 0L, 1), 0);
+		return (printf(LOG_DIE, data.time_die, 1), 0);
 	if (philo_init_mutex(&data) == 1)
 		return (philo_free_struct(&data), 1);
 	if (philo_init(&data) == 1)
