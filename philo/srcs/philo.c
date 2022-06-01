@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 13:44:28 by mbraets           #+#    #+#             */
-/*   Updated: 2022/06/01 15:29:12 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/06/01 15:49:56 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ int	philo_init(t_data *data)
 		if (pthread_create(&data->philos[i]->thread, NULL, &routine,
 				data->philos[i]))
 		{
-			write(2, "error init thread\n", 18);
+			write(2, "Error init thread\n", 18);
 			data->loop = false;
-			return (philo_wait_thread(data), 2);
+			return (philo_wait_thread(data), 1);
 		}
 		if (i == 0)
 			data->philos[i]->left = &data->forks[data->philo_max - 1];
@@ -122,7 +122,7 @@ int	main(int ac, char **av)
 	if (data.philo_max == 1)
 		return (printf(LOG_DIE, data.time_die, 1), 0);
 	if (philo_init_mutex(&data) == 1)
-		return (philo_free_struct(&data), 1);
+		return (write(2, "Error\n", 6), philo_free_struct(&data), 1);
 	if (philo_init(&data) == 1)
 		return (philo_free_struct(&data), 1);
 	if (philo_wait_thread(&data) == 1)
