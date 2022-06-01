@@ -6,7 +6,7 @@
 /*   By: mbraets <mbraets@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 13:44:28 by mbraets           #+#    #+#             */
-/*   Updated: 2022/06/01 15:49:56 by mbraets          ###   ########.fr       */
+/*   Updated: 2022/06/01 16:35:04 by mbraets          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,8 @@ int	philo_wait_thread(t_data *data)
 {
 	size_t	i;
 
-	pthread_mutex_unlock(&data->start_mutex);
 	gettimeofday(&data->start_time, NULL);
+	pthread_mutex_unlock(&data->start_mutex);
 	i = 0;
 	while (data->philos[i] && i < data->philo_max)
 	{
